@@ -1,6 +1,7 @@
 # BLE Soil Moisture Monitoring System
 
-![System Diagram](https://i.imgur.com/JK7w3Yl.png)
+![System Diagram](<img width="839" height="679" alt="螢幕截圖 2025-07-24 下午4 28 26" src="https://github.com/user-attachments/assets/404a7f90-c6cb-4089-9c05-497ab5c8e78e" />
+)
 
 A complete soil moisture monitoring system using BLE with:
 - Web interface (GitHub Page)
