@@ -1,7 +1,5 @@
 # BLE Soil Moisture Monitoring System
 
-![System Architecture Diagram](system-diagram.png)
-
 
 ## Live Demo
 
