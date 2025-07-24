@@ -9,7 +9,7 @@ A complete soil moisture monitoring system using BLE with:
 
 ## Live Demo
 
-[View the web interface](https://yourusername.github.io/BLE-Soil-Monitor)
+[View the web interface](https://cuilonger.github.io/BLE-Soil-Monitor)
 
 ## Features
 
