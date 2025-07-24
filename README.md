@@ -1,11 +1,7 @@
 # BLE Soil Moisture Monitoring System
 
-![System Diagram](螢幕截圖 2025-07-24 下午4.28.26.png)
+![System Architecture Diagram](system-diagram.png)
 
-A complete soil moisture monitoring system using BLE with:
-- Web interface (GitHub Page)
-- ESP32 Hub (central collector)
-- ESP32 Sensors (data nodes)
 
 ## Live Demo
 
