@@ -1,110 +1,468 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>BLE Soil Monitor</title>
+  <title>🌱 Cute Soil Monitor 🌱</title>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="BLE Soil Moisture Monitoring System">
   <style>
-    body { 
-      font-family: Arial, sans-serif; 
-      max-width: 800px; 
-      margin: 0 auto; 
+    :root {
+      --cute-pink: #ffb6c1;
+      --happy-green: #a8e6cf;
+      --fun-blue: #84c7f9;
+      --soft-yellow: #fff9b6;
+      --warm-orange: #ffcc99;
+    }
+    
+    body {
+      font-family: 'Comic Sans MS', 'Marker Felt', 'Arial Rounded MT Bold', sans-serif;
+      max-width: 900px;
+      margin: 0 auto;
       padding: 20px;
-      line-height: 1.6;
+      background-color: #fff9f9;
+      background-image: radial-gradient(var(--cute-pink) 1px, transparent 1px);
+      background-size: 20px 20px;
     }
-    #status { 
-      padding: 10px; 
-      margin: 10px 0; 
-      border-radius: 5px; 
+    
+    h1 {
+      text-align: center;
+      color: #ff85a2;
+      text-shadow: 2px 2px 0px white;
+      font-size: 2.5rem;
+      margin-bottom: 10px;
     }
-    .disconnected { background: #ffdddd; }
-    .scanning { background: #fff3cd; }
-    .connected { background: #ddffdd; }
-    table { 
-      width: 100%; 
-      border-collapse: collapse; 
-      margin-top: 20px; 
+    
+    h1::before, h1::after {
+      content: "🌱";
+      margin: 0 10px;
     }
-    th, td { 
-      padding: 8px; 
-      text-align: left; 
-      border-bottom: 1px solid #ddd; 
+    
+    .container {
+      background-color: white;
+      border-radius: 20px;
+      padding: 25px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+      border: 3px dashed var(--happy-green);
+      position: relative;
+      overflow: hidden;
     }
+    
+    .container::before {
+      content: "";
+      position: absolute;
+      top: -10px;
+      left: -10px;
+      right: -10px;
+      bottom: -10px;
+      border: 2px dotted var(--fun-blue);
+      border-radius: 25px;
+      pointer-events: none;
+      z-index: -1;
+    }
+    
+    #status {
+      padding: 12px;
+      margin: 12px 0;
+      border-radius: 15px;
+      font-weight: bold;
+      text-align: center;
+      font-size: 1.1rem;
+      border: 2px solid;
+    }
+    
+    .disconnected { 
+      background-color: #ffebee;
+      border-color: #ffcdd2;
+      color: #c62828;
+    }
+    .scanning { 
+      background-color: #fff8e1;
+      border-color: #ffecb3;
+      color: #ff8f00;
+    }
+    .connected { 
+      background-color: #e8f5e9;
+      border-color: #c8e6c9;
+      color: #2e7d32;
+    }
+    
+    button {
+      padding: 12px 24px;
+      margin: 8px;
+      background: linear-gradient(to bottom, #ff9a9e, #fad0c4);
+      color: white;
+      border: none;
+      border-radius: 50px;
+      font-size: 16px;
+      cursor: pointer;
+      font-weight: bold;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      transition: all 0.3s;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    button:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+    }
+    
+    button:active {
+      transform: translateY(1px);
+    }
+    
+    button::after {
+      content: "";
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: rgba(255,255,255,0.1);
+      transform: rotate(30deg);
+    }
+    
+    button:hover::after {
+      animation: shine 1.5s infinite;
+    }
+    
+    @keyframes shine {
+      100% {
+        left: 120%;
+      }
+    }
+    
+    button:disabled {
+      background: #e0e0e0;
+      color: #9e9e9e;
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+    }
+    
+    button:disabled::after {
+      display: none;
+    }
+    
+    table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+      margin-top: 20px;
+      background: white;
+      border-radius: 15px;
+      overflow: hidden;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    }
+    
+    th {
+      background: linear-gradient(to right, #84fab0, #8fd3f4);
+      color: white;
+      padding: 15px;
+      text-align: left;
+    }
+    
+    td {
+      padding: 12px;
+      border-bottom: 1px solid #f0f0f0;
+    }
+    
+    tr:last-child td {
+      border-bottom: none;
+    }
+    
+    tr:nth-child(even) {
+      background-color: #f9f9f9;
+    }
+    
     .moisture-bar {
       height: 20px;
-      background: linear-gradient(to right, #e74c3c, #f39c12, #27ae60);
-      border-radius: 3px;
+      background: linear-gradient(to right, #ff9a9e, #fad0c4, #a1c4fd, #a6c1ee);
+      border-radius: 10px;
+      margin: 4px 0;
+      box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);
     }
-    button { 
-      margin: 5px; 
-      padding: 8px 15px; 
-      cursor: pointer;
+    
+    .average-display {
+      margin: 25px 0;
+      padding: 20px;
+      background: linear-gradient(to right, #f6d365, #fda085);
+      border-radius: 15px;
+      font-size: 1.2rem;
+      color: white;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
     }
-    .control-panel { 
-      margin: 20px 0; 
-      padding: 15px; 
-      background: #f0f0f0; 
-      border-radius: 5px; 
+    
+    .average-display::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM12 60c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z' fill='%23ffffff' fill-opacity='0.05' fill-rule='evenodd'/%3E%3C/svg%3E");
     }
+    
+    #averageValue {
+      font-weight: bold;
+      font-size: 1.4rem;
+    }
+    
+    .average-bar {
+      height: 20px;
+      background: linear-gradient(to right, #a18cd1, #fbc2eb);
+      border-radius: 10px;
+      margin-top: 10px;
+      box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);
+    }
+    
+    .average-row {
+      font-weight: bold;
+      background-color: #fffacd;
+    }
+    
+    .status-pattern {
+      width: 100%;
+      height: 30px;
+      margin: 15px 0;
+      border-radius: 15px;
+      background-size: 20px 20px;
+      box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);
+    }
+    
+    .too-dry {
+      background-color: #ff9aa2;
+      background-image: 
+        linear-gradient(45deg, #ff6b6b 25%, transparent 25%),
+        linear-gradient(-45deg, #ff6b6b 25%, transparent 25%),
+        linear-gradient(45deg, transparent 75%, #ff6b6b 75%),
+        linear-gradient(-45deg, transparent 75%, #ff6b6b 75%);
+    }
+    
+    .safe {
+      background-color: #a0e7e5;
+      background-image: 
+        linear-gradient(0deg, #76d7d4 50%, transparent 50%),
+        linear-gradient(90deg, #76d7d4 50%, transparent 50%);
+      background-size: 10px 10px;
+    }
+    
+    .too-wet {
+      background-color: #b5ead7;
+      background-image: 
+        radial-gradient(circle, #8bd3c7 20%, transparent 20%),
+        radial-gradient(circle, #8bd3c7 20%, transparent 20%);
+      background-position: 0 0, 10px 10px;
+    }
+    
+    .legend {
+      background: white;
+      padding: 20px;
+      border-radius: 15px;
+      margin-top: 20px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+      border: 2px dotted #ffb6c1;
+    }
+    
+    .legend h3 {
+      margin-top: 0;
+      color: #ff85a2;
+      text-align: center;
+      border-bottom: 2px dashed #ffb6c1;
+      padding-bottom: 10px;
+    }
+    
+    .legend-item {
+      display: flex;
+      align-items: center;
+      margin: 15px 0;
+      padding: 10px;
+      border-radius: 10px;
+      background: #fff9f9;
+    }
+    
+    .legend-pattern {
+      width: 40px;
+      height: 40px;
+      margin-right: 15px;
+      border-radius: 8px;
+      flex-shrink: 0;
+    }
+    
+    .legend-text {
+      font-weight: bold;
+      color: #666;
+    }
+
     .github-info {
-      margin-top: 30px;
-      padding: 15px;
-      background: #f8f8f8;
-      border-radius: 5px;
-      font-size: 0.9em;
+      background: white;
+      padding: 20px;
+      border-radius: 15px;
+      margin-top: 20px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+      border: 2px dotted #84c7f9;
+      font-size: 0.95rem;
+    }
+    
+    .github-info h3 {
+      margin-top: 0;
+      color: #84c7f9;
+      text-align: center;
+      border-bottom: 2px dashed #84c7f9;
+      padding-bottom: 10px;
+    }
+    
+    .github-info ul {
+      padding-left: 20px;
+    }
+    
+    .github-info li {
+      margin-bottom: 8px;
+    }
+    
+    .github-info a {
+      color: #ff85a2;
+      font-weight: bold;
+      text-decoration: none;
+    }
+    
+    .github-info a:hover {
+      text-decoration: underline;
+    }
+    
+    @media (max-width: 768px) {
+      body {
+        padding: 15px;
+      }
+      
+      h1 {
+        font-size: 2rem;
+      }
+      
+      .container {
+        padding: 15px;
+      }
+      
+      button {
+        width: 100%;
+        margin: 8px 0;
+      }
+      
+      th, td {
+        padding: 10px;
+      }
+    }
+    
+    /* Cute animations */
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-5px); }
+    }
+    
+    .bounce {
+      animation: bounce 2s infinite;
+    }
+    
+    .plant-emoji {
+      font-size: 1.5rem;
+      margin: 0 5px;
+      display: inline-block;
     }
   </style>
 </head>
 <body>
-  <h1>Soil Moisture Monitor (BLE)</h1>
-  
-  <div id="status" class="disconnected">Disconnected</div>
-  <button id="connectBtn">Connect to Hub</button>
-  
-  <div class="control-panel">
-    <h3>Control Panel</h3>
-    <button id="enableBtn" disabled>Enable System</button>
-    <button id="disableBtn" disabled>Disable System</button>
-    <button id="refreshBtn" disabled>Refresh Data</button>
-  </div>
+  <div class="container">
+    <h1 class="bounce"> Soil Moisture Monitor <span class="plant-emoji">🌿</span></h1>
+    
+    <div id="status" class="disconnected">Disconnected <span class="plant-emoji">🔌</span></div>
+    <button id="connectBtn">Connect to Hub <span class="plant-emoji">🔗</span></button>
+    
+    <div class="control-panel">
+      <button id="refreshBtn" disabled>Refresh Data <span class="plant-emoji">🔄</span></button>
+    </div>
 
-  <table id="sensorTable">
-    <tr>
-      <th>Sensor ID</th>
-      <th>Moisture</th>
-      <th>Raw Value</th>
-      <th>Last Update</th>
-    </tr>
-  </table>
+    <div class="average-display">
+      <div>Average Moisture: <span id="averageValue">0%</span></div>
+      <div id="averageBar" class="average-bar" style="width: 0%"></div>
+      
+      <!-- Visual Pattern Alert -->
+      <div id="statusPattern" class="status-pattern"></div>
+    </div>
 
-  <div class="github-info">
-    <h3>GitHub Pages Information</h3>
-    <p>This interface connects to your ESP32 BLE Soil Monitor Hub. Make sure:</p>
-    <ul>
-      <li>Your hub is powered on and nearby</li>
-      <li>You're using Chrome or Edge browser</li>
-      <li>You've enabled Bluetooth on your device</li>
-    </ul>
-    <p>For project details and firmware, visit the <a href="https://github.com/yourusername/BLE-Soil-Monitor" target="_blank">GitHub repository</a>.</p>
+    <table id="sensorTable">
+      <thead>
+        <tr>
+          <th>Sensor ID <span class="plant-emoji">🆔</span></th>
+          <th>Moisture <span class="plant-emoji">💧</span></th>
+          <th>Raw Value <span class="plant-emoji">📊</span></th>
+          <th>Last Update <span class="plant-emoji">⏱️</span></th>
+        </tr>
+      </thead>
+      <tbody id="sensorReadings">
+        <!-- Sensor data will be inserted here -->
+      </tbody>
+    </table>
+
+    <div class="legend">
+      <h3>🌼 Visual Pattern Guide 🌼</h3>
+      <div class="legend-item">
+        <div class="legend-pattern too-dry"></div>
+        <span class="legend-text">Too Dry (&lt;30%) <span class="plant-emoji">🏜️</span></span>
+      </div>
+      <div class="legend-item">
+        <div class="legend-pattern safe"></div>
+        <span class="legend-text">Perfect (30-70%) <span class="plant-emoji">🌱</span></span>
+      </div>
+      <div class="legend-item">
+        <div class="legend-pattern too-wet"></div>
+        <span class="legend-text">Too Wet (&gt;70%) <span class="plant-emoji">🌊</span></span>
+      </div>
+    </div>
+
+    <div class="github-info">
+      <h3>GitHub Pages Information <span class="plant-emoji">ℹ️</span></h3>
+      <p>This interface connects to your ESP32 BLE Soil Monitor Hub. Make sure:</p>
+      <ul>
+        <li>Your hub is powered on and nearby <span class="plant-emoji">🔋</span></li>
+        <li>You're using Chrome or Edge browser <span class="plant-emoji">🌐</span></li>
+        <li>You've enabled Bluetooth on your device <span class="plant-emoji">📶</span></li>
+      </ul>
+      <p>For project details and firmware, visit the <a href="https://github.com/yourusername/BLE-Soil-Monitor" target="_blank">GitHub repository</a> <span class="plant-emoji">👩‍💻</span>.</p>
+    </div>
   </div>
 
   <script>
+    // Service UUIDs
     const SERVICE_UUID = '4fafc201-1fb5-459e-8fcc-c5c9c331914b';
     const COMMAND_UUID = 'beb5483e-36e1-4688-b7f5-ea07361b26a8';
     
+    // DOM Elements
     const statusDiv = document.getElementById('status');
     const connectBtn = document.getElementById('connectBtn');
-    const enableBtn = document.getElementById('enableBtn');
-    const disableBtn = document.getElementById('disableBtn');
     const refreshBtn = document.getElementById('refreshBtn');
-    const sensorTable = document.getElementById('sensorTable');
+    const sensorReadings = document.getElementById('sensorReadings');
+    const averageValue = document.getElementById('averageValue');
+    const averageBar = document.getElementById('averageBar');
+    const statusPattern = document.getElementById('statusPattern');
     
+    // State variables
     let device = null;
     let commandChar = null;
     let lastUpdateTime = 0;
+    let sensorData = [];
 
-    // Connection Management
+    // Initialize
+    checkBluetoothSupport();
+
+    function checkBluetoothSupport() {
+      if (!navigator.bluetooth) {
+        statusDiv.textContent = 'Web Bluetooth not supported. Use Chrome/Edge. 😢';
+        connectBtn.disabled = true;
+      }
+    }
+
+    // Connection handler
     connectBtn.addEventListener('click', async () => {
       try {
         if (device?.gatt?.connected) {
@@ -112,115 +470,198 @@
           return;
         }
         
-        statusDiv.textContent = 'Searching for Hub...';
+        statusDiv.textContent = 'Searching for Hub... 🔍';
         statusDiv.className = 'scanning';
         
         device = await navigator.bluetooth.requestDevice({
           filters: [{ name: 'SoilMonitorHub' }],
-          optionalServices: [SERVICE_UUID]
+          optionalServices: [SERVICE_UUID],
+          acceptAllDevices: false
         });
         
-        statusDiv.textContent = 'Connecting...';
+        statusDiv.textContent = 'Connecting... ⚡';
         const server = await device.gatt.connect();
         
-        statusDiv.textContent = 'Getting Service...';
+        statusDiv.textContent = 'Getting Service... 🔄';
         const service = await server.getPrimaryService(SERVICE_UUID);
         
-        statusDiv.textContent = 'Getting Characteristics...';
+        statusDiv.textContent = 'Getting Characteristics... ⏳';
         commandChar = await service.getCharacteristic(COMMAND_UUID);
         
         await commandChar.startNotifications();
         commandChar.addEventListener('characteristicvaluechanged', handleSensorData);
         
-        statusDiv.textContent = 'Connected to Hub';
+        statusDiv.textContent = 'Connected! 🌟 Ready to monitor!';
         statusDiv.className = 'connected';
-        connectBtn.textContent = 'Disconnect';
+        connectBtn.textContent = 'Disconnect 🔗';
         
         device.addEventListener('gattserverdisconnected', onDisconnected);
         
-        enableBtn.disabled = false;
-        disableBtn.disabled = false;
         refreshBtn.disabled = false;
-        
         sendCommand('status');
         
       } catch (error) {
-        console.error('Error:', error);
-        statusDiv.textContent = `Error: ${error.message}`;
+        console.error('Connection error:', error);
+        statusDiv.textContent = `Oops! ${error.message} 😅`;
         statusDiv.className = 'disconnected';
       }
     });
 
-    // Sensor Data Handling
+    // Process sensor data
     function handleSensorData(event) {
       const decoder = new TextDecoder();
       const dataStr = decoder.decode(event.target.value);
       
-      // Clear existing rows (keep header)
-      while(sensorTable.rows.length > 1) {
-        sensorTable.deleteRow(1);
+      sensorData = dataStr.split(';')
+        .filter(Boolean)
+        .map(entry => {
+          const [id, raw, pct] = entry.split(',');
+          return {
+            id,
+            rawValue: raw,
+            moisturePct: parseInt(pct)
+          };
+        });
+      
+      updateDisplay();
+      updateStatusPattern();
+      lastUpdateTime = Date.now();
+      
+      // Add cute celebration for perfect moisture
+      const avg = calculateAverage();
+      if (avg >= 30 && avg <= 70) {
+        celebrate();
+      }
+    }
+
+    // Little celebration effect
+    function celebrate() {
+      const emojis = ['🌱', '🌿', '🍀', '🌷', '🌸', '🌼', '💧', '✨'];
+      const container = document.querySelector('.container');
+      
+      for (let i = 0; i < 10; i++) {
+        const emoji = document.createElement('div');
+        emoji.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+        emoji.style.position = 'absolute';
+        emoji.style.left = Math.random() * 100 + '%';
+        emoji.style.top = Math.random() * 100 + '%';
+        emoji.style.fontSize = (Math.random() * 20 + 10) + 'px';
+        emoji.style.opacity = '0';
+        emoji.style.animation = `float-up ${Math.random() * 2 + 1}s forwards`;
+        
+        container.appendChild(emoji);
+        
+        setTimeout(() => {
+          emoji.remove();
+        }, 1000);
       }
       
-      dataStr.split(';').filter(Boolean).forEach(entry => {
-        const [id, raw, pct] = entry.split(',');
-        const row = sensorTable.insertRow();
-        
-        row.insertCell().textContent = id;
-        
-        const moistureCell = row.insertCell();
-        moistureCell.innerHTML = `
-          <div class="moisture-bar" style="width: ${pct}%"></div>
-          ${pct}%
+      // Add floating animation
+      const style = document.createElement('style');
+      style.textContent = `
+        @keyframes float-up {
+          0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+          100% { transform: translateY(-100px) rotate(360deg); opacity: 0; }
+        }
+      `;
+      document.head.appendChild(style);
+    }
+
+    // Update visual pattern based on average
+    function updateStatusPattern() {
+      const avg = calculateAverage();
+      
+      // Clear all classes first
+      statusPattern.className = 'status-pattern';
+      
+      if (avg < 30) {
+        statusPattern.classList.add('too-dry');
+      } else if (avg > 70) {
+        statusPattern.classList.add('too-wet');
+      } else {
+        statusPattern.classList.add('safe');
+      }
+    }
+
+    // Calculate average moisture
+    function calculateAverage() {
+      if (sensorData.length === 0) return 0;
+      const sum = sensorData.reduce((total, sensor) => total + sensor.moisturePct, 0);
+      return Math.round(sum / sensorData.length);
+    }
+
+    // Update the display
+    function updateDisplay() {
+      sensorReadings.innerHTML = '';
+      
+      sensorData.forEach(sensor => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+          <td>${sensor.id}</td>
+          <td>
+            <div class="moisture-bar" style="width: ${sensor.moisturePct}%"></div>
+            ${sensor.moisturePct}%
+          </td>
+          <td>${sensor.rawValue}</td>
+          <td>Just now</td>
         `;
-        
-        row.insertCell().textContent = raw;
-        row.insertCell().textContent = 'Just now';
+        sensorReadings.appendChild(row);
       });
       
-      lastUpdateTime = Date.now();
+      const avg = calculateAverage();
+      averageValue.textContent = `${avg}%`;
+      averageBar.style.width = `${avg}%`;
+      
+      // Add average row
+      const avgRow = document.createElement('tr');
+      avgRow.className = 'average-row';
+      avgRow.innerHTML = `
+        <td>AVERAGE</td>
+        <td>
+          <div class="average-bar" style="width: ${avg}%"></div>
+          ${avg}%
+        </td>
+        <td colspan="2"></td>
+      `;
+      sensorReadings.appendChild(avgRow);
     }
 
-    // Command Functions
+    // Send commands to device
     async function sendCommand(cmd) {
       if (!commandChar) return;
-      const encoder = new TextEncoder();
-      await commandChar.writeValue(encoder.encode(cmd));
+      try {
+        const encoder = new TextEncoder();
+        await commandChar.writeValue(encoder.encode(cmd));
+      } catch (error) {
+        console.error('Command error:', error);
+      }
     }
 
-    enableBtn.addEventListener('click', () => sendCommand('enable'));
-    disableBtn.addEventListener('click', () => sendCommand('disable'));
-    refreshBtn.addEventListener('click', () => sendCommand('status'));
-
-    // Disconnection Handler
+    // Disconnection handler
     function onDisconnected() {
-      statusDiv.textContent = 'Disconnected';
+      statusDiv.textContent = 'Disconnected 😢 Please reconnect!';
       statusDiv.className = 'disconnected';
-      connectBtn.textContent = 'Connect to Hub';
-      
-      enableBtn.disabled = true;
-      disableBtn.disabled = true;
+      connectBtn.textContent = 'Connect to Hub 🔗';
       refreshBtn.disabled = true;
-      
       device = null;
       commandChar = null;
     }
 
     // Update timestamps every second
     setInterval(() => {
-      const timeCells = document.querySelectorAll('#sensorTable tr td:nth-child(4)');
+      const timeCells = document.querySelectorAll('#sensorReadings tr td:nth-child(4)');
+      const currentTime = Date.now();
+      
       timeCells.forEach(cell => {
         if (cell.textContent !== 'Just now') {
-          const seconds = Math.floor((Date.now() - lastUpdateTime) / 1000);
+          const seconds = Math.floor((currentTime - lastUpdateTime) / 1000);
           cell.textContent = `${seconds}s ago`;
         }
       });
     }, 1000);
 
-    // Initial setup
-    if (!navigator.bluetooth) {
-      statusDiv.textContent = 'Web Bluetooth not supported. Use Chrome/Edge.';
-      connectBtn.disabled = true;
-    }
+    // Refresh button handler
+    refreshBtn.addEventListener('click', () => sendCommand('status'));
   </script>
 </body>
 </html>
