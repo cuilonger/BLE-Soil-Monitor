@@ -5,7 +5,7 @@ A cute plant monitoring system using ESP32 BLE and web interface.
 ## Web Interface
 
 The web interface is available at:  
-[https://cuilonger.github.io/BLE-Soil-Monitor](https://yourusername.github.io/BLE-Soil-Monitor)
+[https://cuilonger.github.io/BLE-Soil-Monitor](https://cuilonger.github.io/BLE-Soil-Monitor)
 
 ## Features
 
