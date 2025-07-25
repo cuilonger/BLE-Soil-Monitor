@@ -1,43 +1,28 @@
-# BLE Soil Moisture Monitoring System
+# BLE Soil Monitor 🌱
 
+A cute plant monitoring system using ESP32 BLE and web interface.
 
-## Live Demo
+## Web Interface
 
-[View the web interface](https://cuilonger.github.io/BLE-Soil-Monitor)
+The web interface is available at:  
+[https://yourusername.github.io/BLE-Soil-Monitor](https://yourusername.github.io/BLE-Soil-Monitor)
 
 ## Features
 
 - Real-time soil moisture monitoring
-- Web-based dashboard with visual indicators
-- BLE communication between sensors and hub
-- Remote enable/disable functionality
+- Multiple sensor support
+- Visual moisture indicators
+- BLE connectivity
+- Responsive design
 
 ## Hardware Requirements
 
-- 1x ESP32 board (for hub)
-- 1+ ESP32 boards (for sensors)
-- Soil moisture sensors (for real deployment)
+- ESP32 board
+- Soil moisture sensors
+- BLE capability
 
-## Setup Instructions
+## Setup
 
-1. Flash the hub firmware to your central ESP32
-2. Flash the sensor firmware to your sensor ESP32(s) (change SENSOR_ID for each)
-3. Open the web interface on Chrome/Edge
-4. Connect to your hub via BLE
-
-## Repository Structure
-
-- `index.html` - Web interface (GitHub Page)
-- `firmware/hub/` - Hub firmware (central collector)
-- `firmware/sensor/` - Sensor firmware (data nodes)
-
-## Browser Support
-
-This application requires:
-- Chrome/Edge browser
-- Web Bluetooth support
-- HTTPS connection (provided by GitHub Pages)
-
-## License
-
-MIT License - Free for personal and commercial use
+1. Flash the ESP32 with the provided firmware
+2. Deploy the web interface to GitHub Pages
+3. Connect your device and monitor your plants!
